@@ -5,7 +5,7 @@ namespace FedExAPI.Models
 	{
 		public T? Data { get; set; }
 
-		public Error? Error { get; set; }
+		public ApiError? Error { get; set; }
 	}
 }
 

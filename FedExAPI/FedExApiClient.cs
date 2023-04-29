@@ -60,16 +60,23 @@ namespace FedExAPI
                 if (string.IsNullOrEmpty(responseContent?.Trim()))
                     return result;
 
-                result.Error = JsonSerializer.Deserialize<Error>(responseContent);
+                result.Error = JsonSerializer.Deserialize<ApiError>(responseContent);
 
                 return result;
             }
 
             result.Data = JsonSerializer.Deserialize<OAuth>(responseContent);
-
             return result;
         }
 
-        public async Task<ApiResponse<>>
+        //public async Task<ApiResponse<>>
     }
 }
+
+// TODO: Add Event Types from Consolidation Details (ex. PACKAGE_ADDED_TO_CONSOLIDATION)
+
+// TODO: Add Reason Detail Types from Reason Detail under Consolidation Details (ex. REJECTED)
+
+// TODO: Add Service Types from Service Detail - https://developer.fedex.com/api/en-us/guides/api-reference.html#servicetypes
+
+// TODO: Add Currency Codes from Package Detail - https://developer.fedex.com/api/en-us/guides/api-reference.html#currencycodes

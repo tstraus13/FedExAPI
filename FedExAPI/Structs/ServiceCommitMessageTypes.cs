@@ -1,0 +1,23 @@
+namespace FedExAPI.Structs
+{
+	public struct ServiceCommitMessageTypes
+	{
+		public const string BROKER_DELIVERED_DESCRIPTION                = "BROKER_DELIVERED_DESCRIPTION";
+		public const string CANCELLED_DESCRIPTION                       = "CANCELLED_DESCRIPTION";
+		public const string DELIVERY_IN_MULTIPLE_PIECE_SHIPMENT         = "DELIVERY_IN_MULTIPLE_PIECE_SHIPMENT";
+		public const string ESTIMATED_DELIVERY_DATE_UNAVAILABLE         = "ESTIMATED_DELIVERY_DATE_UNAVAILABLE";
+		public const string EXCEPTION_IN_MULTIPLE_PIECE_SHIPMENT        = "EXCEPTION_IN_MULTIPLE_PIECE_SHIPMENT";
+		public const string FINAL_DELIVERY_ATTEMPTED                    = "FINAL_DELIVERY_ATTEMPTED";
+		public const string FIRST_DELIVERY_ATTEMPTED                    = "FIRST_DELIVERY_ATTEMPTED";
+		public const string HELD_PACKAGE_AVAILABLE_FOR_RECIPIENT_PICKUP = "HELD_PACKAGE_AVAILABLE_FOR_RECIPIENT_PICKUP";
+
+		public const string HELD_PACKAGE_AVAILABLE_FOR_RECIPIENT_PICKUP_WITH_ADDRESS =
+			"HELD_PACKAGE_AVAILABLE_FOR_RECIPIENT_PICKUP_WITH_ADDRESS";
+
+		public const string HELD_PACKAGE_NOT_AVAILABLE_FOR_RECIPIENT_PICKUP = "HELD_PACKAGE_NOT_AVAILABLE_FOR_RECIPIENT_PICKUP";
+		public const string SHIPMENT_LABEL_CREATED                          = "SHIPMENT_LABEL_CREATED";
+		public const string SUBSEQUENT_DELIVERY_ATTEMPTED                   = "SUBSEQUENT_DELIVERY_ATTEMPTED";
+		public const string USPS_DELIVERED                                  = "USPS_DELIVERED";
+		public const string USPS_DELIVERING                                 = "USPS_DELIVERING";
+	}
+}
