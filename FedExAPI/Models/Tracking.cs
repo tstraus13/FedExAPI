@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace FedExAPI.Models
 {
@@ -10,13 +8,16 @@ namespace FedExAPI.Models
 		public List<TrackingItem> TrackingItems { get; set; } = new List<TrackingItem>();
 
 		[JsonPropertyName("alerts")]
-		public string Alerts { get; set; } = "";
+		public List<Alert> Alerts { get; set; } = new List<Alert>();
 	}
 
 	public class TrackingItem
 	{
 		[JsonPropertyName("trackingNumber")]
 		public string TrackingNumber { get; set; } = "";
+
+		[JsonPropertyName("pagingDetail")]
+		public PagingDetailResponse PagingDetail { get; set; } = new PagingDetailResponse();
 
 		[JsonPropertyName("trackResults")]
 		public List<TrackingDetail> TrackingDetails { get; set; } = new List<TrackingDetail>();
@@ -89,6 +90,33 @@ namespace FedExAPI.Models
 		
 		[JsonPropertyName("estimatedDeliveryTimeWindow")]
 		public List<DeliveryWindow> EstimatedDeliveryTimeWindow { get; set; } = new List<DeliveryWindow>();
+
+		[JsonPropertyName("pieceCounts")]
+		public List<PieceCount> PieceCounts { get; set; } = new List<PieceCount>();
+
+		[JsonPropertyName("originLocation")]
+		public Location OriginLocation { get; set; } = new Location();
+
+		[JsonPropertyName("recipientInformation")]
+		public ContactAndAddress RecipientInformation { get; set; } = new ContactAndAddress();
+
+		[JsonPropertyName("standardTransitTimeWindow")]
+		public DeliveryWindow StandardTransitTimeWindow { get; set; } = new DeliveryWindow();
+
+		[JsonPropertyName("shipmentDetails")]
+		public ShipmentDetail ShipmentDetail { get; set; } = new ShipmentDetail();
+
+		[JsonPropertyName("reasonDetail")]
+		public ReasonDetail ReasonDetail { get; set; } = new ReasonDetail();
+
+		[JsonPropertyName("availableNotifications")]
+		public string[] AvailableNotifications { get; set; } = Array.Empty<string>();
+
+		[JsonPropertyName("shipperInformation")]
+		public ContactAndAddress ShipperInformation { get; set; } = new ContactAndAddress();
+
+		[JsonPropertyName("lastUpdatedDestinationAddress")]
+		public Address LastUpdatedDestinationAddress { get; set; } = new Address();
 	}
 
 	public class TrackingNumberDetail
@@ -97,9 +125,11 @@ namespace FedExAPI.Models
 		public string TrackingNumber { get; set; } = "";
 
 		[JsonPropertyName("carrierCode")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string CarrierCode { get; set; } = "";
 
 		[JsonPropertyName("trackingNumberUniqueId")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string TrackingNumberUniqueId { get; set; } = "";
 	}
 
@@ -666,5 +696,117 @@ namespace FedExAPI.Models
 				return DateTime.TryParse(EndsText, out DateTime result) ? result : default(DateTime);
 			}
 		}
+	}
+
+	public class PieceCount
+	{
+		[JsonPropertyName("count")]
+		public string CountText { get; set; } = "";
+
+		[JsonPropertyName("description")]
+		public string Description { get; set; } = "";
+
+		[JsonPropertyName("type")]
+		public string Type { get; set; } = "";
+
+		public int Count
+		{
+			get
+			{
+				return int.TryParse(CountText, out int result) ? result : 0;
+			}
+		}
+	}
+
+	public class ShipmentDetail
+	{
+		[JsonPropertyName("contents")]
+		public List<Content> Contents { get; set; } = new List<Content>();
+		
+		[JsonPropertyName("beforePossessionStatus")]
+		public bool BeforePossessionStatus { get; set; }
+
+		[JsonPropertyName("weight")]
+		public Weight Weight { get; set; } = new Weight();
+
+		[JsonPropertyName("contentPieceCount")]
+		public string ContentPieceCountText { get; set; } = "";
+
+		[JsonPropertyName("splitShipments")]
+		public List<SplitShipment> SplitShipments { get; set; } = new List<SplitShipment>();
+
+		public int ContentPieceCount
+		{
+			get
+			{
+				return int.TryParse(ContentPieceCountText, out int result) ? result : 0;
+			}
+		}
+	}
+	
+	public class Content
+	{
+		[JsonPropertyName("itemNumber")]
+		public string ItemNumber { get; set; } = "";
+
+		[JsonPropertyName("receivedQuantity")]
+		public string ReceivedQuantityText { get; set; } = "";
+
+		[JsonPropertyName("description")]
+		public string Description { get; set; } = "";
+		
+		[JsonPropertyName("partNumber")]
+		public string PartNumber { get; set; } = "";
+
+		public int ReceivedQuantity
+		{
+			get
+			{
+				return int.TryParse(ReceivedQuantityText, out int result) ? result : 0;
+			}
+		}
+	}
+
+	public class SplitShipment
+	{
+		[JsonPropertyName("pieceCount")]
+		public string PieceCountText { get; set; } = "";
+
+		[JsonPropertyName("statusDescription")]
+		public string StatusDescription { get; set; } = "";
+
+		[JsonPropertyName("timestamp")]
+		public string TimestampText { get; set; } = "";
+		
+		[JsonPropertyName("statusCode")]
+		public string StatusCode { get; set; } = "";
+		
+		public int PieceCount
+		{
+			get
+			{
+				return int.TryParse(PieceCountText, out int result) ? result : 0;
+			}
+		}
+
+		public DateTime Timestamp
+		{
+			get
+			{
+				return DateTime.TryParse(TimestampText, out DateTime result) ? result : default(DateTime);
+			}
+		}
+	}
+
+	public class Alert
+	{
+		[JsonPropertyName("code")]
+		public string Code { get; set; } = "";
+
+		[JsonPropertyName("alertType")]
+		public string AlertType { get; set; } = "";
+
+		[JsonPropertyName("message")]
+		public string Message { get; set; } = "";
 	}
 }
