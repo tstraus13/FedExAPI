@@ -2,25 +2,28 @@
 
 namespace FedExAPI.Models
 {
-	public class Tracking
+	public class MultiTracking
 	{
 		[JsonPropertyName("completeTrackResults")]
-		public List<TrackingItem> TrackingItems { get; set; } = new List<TrackingItem>();
+		public List<MultiTrackingItem> TrackingItems { get; set; } = new List<MultiTrackingItem>();
 
 		[JsonPropertyName("alerts")]
 		public List<Alert> Alerts { get; set; } = new List<Alert>();
 	}
 
-	public class TrackingItem
+	public class MultiTrackingItem
 	{
 		[JsonPropertyName("trackingNumber")]
 		public string TrackingNumber { get; set; } = "";
-		
+
+		[JsonPropertyName("pagingDetail")]
+		public PagingDetailResponse PagingDetail { get; set; } = new PagingDetailResponse();
+
 		[JsonPropertyName("trackResults")]
-		public List<TrackingDetail> TrackingDetails { get; set; } = new List<TrackingDetail>();
+		public List<MutliTrackingDetail> TrackingDetails { get; set; } = new List<MutliTrackingDetail>();
 	}
 
-	public class TrackingDetail
+	public class MutliTrackingDetail
 	{
 		[JsonPropertyName("trackingNumberInfo")]
 		public TrackingNumberDetail TrackingNumberDetail { get; set; } = new TrackingNumberDetail();
@@ -86,7 +89,7 @@ namespace FedExAPI.Models
 		public List<DeliveryOption> CustomDeliveryOptions { get; set; } = new List<DeliveryOption>();
 		
 		[JsonPropertyName("estimatedDeliveryTimeWindow")]
-		public DeliveryWindow EstimatedDeliveryTimeWindow { get; set; } = new DeliveryWindow();
+		public List<DeliveryWindow> EstimatedDeliveryTimeWindow { get; set; } = new List<DeliveryWindow>();
 
 		[JsonPropertyName("pieceCounts")]
 		public List<PieceCount> PieceCounts { get; set; } = new List<PieceCount>();
@@ -116,6 +119,7 @@ namespace FedExAPI.Models
 		public Address LastUpdatedDestinationAddress { get; set; } = new Address();
 	}
 
+	/*
 	public class TrackingNumberDetail
 	{
 		[JsonPropertyName("trackingNumber")]
@@ -150,14 +154,11 @@ namespace FedExAPI.Models
 		[JsonPropertyName("type")]
 		public string Type { get; set; } = "";
 
-		[JsonPropertyName("values")]
-		public string[] Values { get; set; } = Array.Empty<string>();
+		[JsonPropertyName("value")]
+		public string[] Value { get; set; } = Array.Empty<string>();
 
 		[JsonPropertyName("trackingNumberUniqueId")]
 		public string TrackingNumberUniqueId { get; set; } = "";
-
-		[JsonPropertyName("carrierCode")]
-		public string CarrierCode { get; set; } = "";
 	}
 
 	public class Distance
@@ -293,7 +294,7 @@ namespace FedExAPI.Models
 	public class StatusDetail
 	{
 		[JsonPropertyName("scanLocation")]
-		public Address ScanLocation { get; set; } = new Address();
+		public Location ScanLocation { get; set; } = new Location();
 
 		[JsonPropertyName("code")]
 		public string Code { get; set; } = "";
@@ -464,7 +465,7 @@ namespace FedExAPI.Models
 		public string DerivedStatus { get; set; } = "";
 
 		[JsonPropertyName("scanLocation")]
-		public Address ScanLocation { get; set; } = new Address();
+		public Location ScanLocation { get; set; } = new Location();
 		
 		[JsonPropertyName("locationId")]
 		public string LocationId { get; set; } = "";
@@ -502,18 +503,10 @@ namespace FedExAPI.Models
 	public class DateAndTime
 	{
 		[JsonPropertyName("dateTime")]
-		public string DateTimeText { get; set; } = "";
+		public string DateTime { get; set; } = "";
 
 		[JsonPropertyName("type")]
 		public string Type { get; set; } = "";
-		
-		public DateTime DateTime
-		{
-			get
-			{
-				return DateTime.TryParse(DateTimeText, out DateTime result) ? result : default(DateTime);
-			}
-		}
 	}
 
 	public class PackageDetail
@@ -731,8 +724,8 @@ namespace FedExAPI.Models
 		[JsonPropertyName("contents")]
 		public List<Content> Contents { get; set; } = new List<Content>();
 		
-		[JsonPropertyName("possessionStatus")]
-		public bool PossessionStatus { get; set; }
+		[JsonPropertyName("beforePossessionStatus")]
+		public bool BeforePossessionStatus { get; set; }
 
 		[JsonPropertyName("weight")]
 		public Weight Weight { get; set; } = new Weight();
@@ -817,4 +810,5 @@ namespace FedExAPI.Models
 		[JsonPropertyName("message")]
 		public string Message { get; set; } = "";
 	}
+	*/
 }

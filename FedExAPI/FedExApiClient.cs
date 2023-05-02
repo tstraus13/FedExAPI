@@ -80,16 +80,16 @@ namespace FedExAPI
 
         public async Task<ApiResponse<TrackMultiPieceResponse>> TrackMultiPieceShipment(string trackingNumber, string associatedType,
             bool includeDetailedScans = false, string? carrierCode = null, string? trackingNumberUniqueId = null, int resultsPerPage = 0,
-            string? pagingToken = null, DateTime? shipDateBegin = null, DateTime? shipDateEnd = null, string? transactionId = null)
+            string? pagingToken = null, DateTime? shipDateBegin = null, DateTime? shipDateEnd = null, string? customerTransactionId = null)
         {
-            var requestModel = new TrackMultiPieceRequest(trackingNumber, associatedType,
+            var request = new TrackMultiPieceRequest(trackingNumber, associatedType,
                 includeDetailedScans, carrierCode, trackingNumberUniqueId, resultsPerPage,
                 pagingToken, shipDateBegin, shipDateEnd);
 
-            return await TrackMultiPieceShipment(requestModel, transactionId);
+            return await TrackMultiPieceShipment(request, customerTransactionId);
         }
 
-        public async Task<ApiResponse<TrackMultiPieceResponse>> TrackMultiPieceShipment(TrackMultiPieceRequest request, string? transactionId = null)
+        public async Task<ApiResponse<TrackMultiPieceResponse>> TrackMultiPieceShipment(TrackMultiPieceRequest request, string? customerTransactionId = null)
         {
             if (string.IsNullOrEmpty(request.MasterTrackingNumberInfo.TrackingNumberDetail.TrackingNumber) 
                 || string.IsNullOrWhiteSpace(request.MasterTrackingNumberInfo.TrackingNumberDetail.TrackingNumber))
@@ -104,8 +104,8 @@ namespace FedExAPI
 
             HttpContent content = new StringContent(requestJson, Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
             
-            if (!string.IsNullOrEmpty(transactionId) && !string.IsNullOrWhiteSpace(transactionId))
-                content.Headers.Add("x-customer-transaction-id", transactionId);
+            if (!string.IsNullOrEmpty(customerTransactionId) && !string.IsNullOrWhiteSpace(customerTransactionId))
+                content.Headers.Add("x-customer-transaction-id", customerTransactionId);
 
             if (_auth.Expired)
                 await RetrieveOAuth();
@@ -128,6 +128,69 @@ namespace FedExAPI
             return result;
         }
 
+        public async Task<ApiResponse<TrackByTrackingNumberResponse>> TrackByTrackingNumber(string trackingNumber,
+            bool includeDetailedScans = false, string? carrierCode = null, string? trackingNumberUniqueId = null,
+            DateTime? shipDateBegin = null, DateTime? shipDateEnd = null, string? customerTransactionId = null)
+        {
+            var request = new TrackByTrackingNumberRequest(
+                trackingNumber, includeDetailedScans, carrierCode,
+                trackingNumberUniqueId, shipDateBegin, shipDateEnd
+            );
+
+            return await TrackByTrackingNumber(request, trackingNumberUniqueId);
+        }
+
+        public async Task<ApiResponse<TrackByTrackingNumberResponse>> TrackByTrackingNumber(TrackingNumberInfo tracking,
+            string? customerTransactionId = null)
+        {
+            var request = new TrackByTrackingNumberRequest(tracking);
+
+            return await TrackByTrackingNumber(request, customerTransactionId);
+        }
+
+        public async Task<ApiResponse<TrackByTrackingNumberResponse>> TrackByTrackingNumber(List<TrackingNumberInfo> tracking,
+            string? customerTransactionId = null)
+        {
+            var request = new TrackByTrackingNumberRequest(tracking);
+
+            return await TrackByTrackingNumber(request, customerTransactionId);
+        }
+        
+        public async Task<ApiResponse<TrackByTrackingNumberResponse>> TrackByTrackingNumber(TrackByTrackingNumberRequest request,
+            string? customerTransactionId = null)
+        {
+            if (request.TrackingNumberInfo == null || !request.TrackingNumberInfo.Any())
+                throw new Exception("Tracking Number is Required!");
+
+            var result = new ApiResponse<TrackByTrackingNumberResponse>();
+            
+            var requestJson = JsonSerializer.Serialize(request);
+
+            HttpContent content = new StringContent(requestJson, Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
+            
+            if (!string.IsNullOrEmpty(customerTransactionId) && !string.IsNullOrWhiteSpace(customerTransactionId))
+                content.Headers.Add("x-customer-transaction-id", customerTransactionId);
+
+            if (_auth.Expired)
+                await RetrieveOAuth();
+            
+            var response = await _httpClient.PostAsync("/track/v1/trackingnumbers", content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                if (string.IsNullOrEmpty(responseContent?.Trim()))
+                    return result;
+
+                result.Error = JsonSerializer.Deserialize<ApiError>(responseContent);
+
+                return result;
+            }
+            
+            result.Data = JsonSerializer.Deserialize<TrackByTrackingNumberResponse>(responseContent);
+
+            return result;
+        }
         public void Dispose()
         {
             Dispose(true);

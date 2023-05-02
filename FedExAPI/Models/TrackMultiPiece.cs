@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace FedExAPI.Models
 {
@@ -13,7 +11,7 @@ namespace FedExAPI.Models
         public string CustomerTransactionId { get; set; } = "";
 
         [JsonPropertyName("output")]
-        public Tracking Tracking { get; set; } = new Tracking();
+        public MultiTracking Tracking { get; set; } = new MultiTracking();
     }
 
 	public class TrackMultiPieceRequest
