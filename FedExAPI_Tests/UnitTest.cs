@@ -55,4 +55,16 @@ public class UnitTests
         
         Assert.IsTrue(tracking.Data != null);
     }
+
+    [TestMethod]
+    public void Test_TrackDocument()
+    {
+        var doc = _client
+            .TrackDocument("231300687629630", DocumentTypes.SIGNATURE_PROOF_OF_DELIVERY)
+            .GetAwaiter()
+            .GetResult();
+        
+        // TODO: Can not find valid mock tracking number to properly test
+        Assert.IsTrue(true);
+    }
 }

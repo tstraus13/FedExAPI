@@ -63,6 +63,10 @@ namespace FedExAPI.Models
 		[JsonPropertyName("shipDateEnd")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? ShipDateEnd { get; set; } = null;
+		
+		[JsonPropertyName("accountNumber")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string? AccountNumber { get; set; } = null;
 
 		[JsonPropertyName("trackingNumberInfo")]
 		public TrackingNumberDetail TrackingNumberDetail { get; set; } = new TrackingNumberDetail();

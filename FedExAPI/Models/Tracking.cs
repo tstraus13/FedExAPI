@@ -123,11 +123,11 @@ namespace FedExAPI.Models
 
 		[JsonPropertyName("carrierCode")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public string CarrierCode { get; set; } = "";
+		public string? CarrierCode { get; set; } = null;
 
 		[JsonPropertyName("trackingNumberUniqueId")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public string TrackingNumberUniqueId { get; set; } = "";
+		public string? TrackingNumberUniqueId { get; set; } = null;
 	}
 
 	public class AdditionalTrackingDetail
